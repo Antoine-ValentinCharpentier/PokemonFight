@@ -1,0 +1,18 @@
+# Stage 1 : Create the build
+FROM node:20.18-alpine As build
+
+WORKDIR /usr/src/app
+
+COPY package.json ./
+
+RUN npm install -g @angular/cli
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+# Stage 2 : Host the build
+FROM nginx:1.15.8-alpine
+
+COPY --from=build /usr/src/app/dist/frontend/browser /usr/share/nginx/html
