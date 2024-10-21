@@ -1,0 +1,54 @@
+// Card generale
+.card {
+  position: relative;
+  width: 200px;
+  padding: 30px 20px;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+// Card img
+.card img {
+  display: block;
+  width: 100px;
+  max-height: 200px;
+  position: relative;
+  margin: 0px auto;
+}
+
+// Name 
+
+.poke-name {
+  text-align: center;
+  font-weight: 600;
+}
+
+// Types
+
+.types {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0 10px 0;
+}
+.types span {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+}
+.types span {
+  padding: 5px 20px;
+  border-radius: 20px;
+  color: #ffffff;
+}
+
+// Stats
+
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+.stats p {
+  color: #404060;
+}
