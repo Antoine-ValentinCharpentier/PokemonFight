@@ -1,12 +1,19 @@
-
-
 <h2>Pokedex</h2>
 
-<div class="pokedex">
-  @for (pokemon of pokedex; track pokemon) {
+<div class="pokedex-search">
+  <p>You can find a specific Pokémon by entering its name :</p>
+  <input
+    type="text"
+    placeholder="Name of a Pokémon to search"
+    [(ngModel)]="searchTermPokedex"
+    (input)="onSearchTermChange()"
+  />
+</div>
+
+<div class="pokedex-list">
+  <div *ngFor="let pokemon of filteredPokedex">
     <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
-  }
-  @empty {
-      <p>Thank you for your patience. We are currently retrieving the available Pokémon.</p>
-  }
+  </div>
+
+  <p *ngIf="filteredPokedex.length === 0">No Pokémon found.</p>
 </div>
