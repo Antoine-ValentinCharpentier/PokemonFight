@@ -1,3 +1,26 @@
+<h2>Team</h2>
+
+<div class="team">
+  <p>Please compose your team of 3 Pokémon</p>
+  <div>
+    @for(pokemon of team; track pokemon.name; let indexPokemon = $index) {
+    <app-pokemon-card
+      [cliquable]="true"
+      [selected]="indexPokemon === selectedIndexPokemonTeam"
+      [pokemon]="pokemon"
+      (click)="onClickPokemonTeam(indexPokemon)"
+    ></app-pokemon-card>
+    } 
+    @for(fakePokemon of [].constructor(3-team.length); track fakePokemon; let i = $index) {
+    <app-pokemon-card
+      [pokemon]="null"
+      [selected]="i + team.length === selectedIndexPokemonTeam"
+      (click)="onClickPokemonTeam(i + team.length)"
+    ></app-pokemon-card>
+    }
+  </div>
+</div>
+
 <h2>Pokedex</h2>
 
 <div class="pokedex-search">
@@ -11,9 +34,14 @@
 </div>
 
 <div class="pokedex-list">
-  <div *ngFor="let pokemon of filteredPokedex">
-    <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
-  </div>
-
-  <p *ngIf="filteredPokedex.length === 0">No Pokémon found.</p>
+  @for(pokemon of filteredPokedex; track pokemon.name) {
+  <app-pokemon-card
+    [cliquable]="true"
+    [pokemon]="pokemon"
+    (click)="onClickPokemonPokedex(pokemon)"
+  ></app-pokemon-card>
+  }
+  @empty {
+    <p>No Pokémon found.</p>
+  }
 </div>

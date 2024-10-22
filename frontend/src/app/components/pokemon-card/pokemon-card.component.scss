@@ -5,50 +5,68 @@
   padding: 30px 20px;
   box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
-}
+  border: 2px white solid;
 
-// Card img
-.card img {
-  display: block;
-  width: 100px;
-  max-height: 200px;
-  position: relative;
-  margin: 0px auto;
-}
+  // poke img
+  img {
+    display: block;
+    width: 100px;
+    max-height: 200px;
+    position: relative;
+    margin: 0px auto;
+  }
+  // Name
+  .poke-name {
+    text-align: center;
+    font-weight: 600;
+  }
+  // Types
+  .types {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0 10px 0;
+    span {
+      font-size: 12px;
+      letter-spacing: 0.4px;
+      font-weight: 600;
 
-// Name 
+      padding: 5px 20px;
+      border-radius: 20px;
+      color: #ffffff;
+    }
+  }
+  //  Stats
+  .stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    p {
+      color: #404060;
+    }
+  }
 
-.poke-name {
-  text-align: center;
-  font-weight: 600;
-}
+  // Empty
+  &.card-empty {
+    border: 1px solid black;
+    border-style: dashed;
+    box-shadow: none;
+    height: 324px;
+    padding: 0 20px;
 
-// Types
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.types {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px 0 10px 0;
-}
-.types span {
-  font-size: 12px;
-  letter-spacing: 0.4px;
-  font-weight: 600;
-}
-.types span {
-  padding: 5px 20px;
-  border-radius: 20px;
-  color: #ffffff;
-}
+  &.cliquable {
+    cursor: pointer;
+    &:hover {
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+    }
+  }
 
-// Stats
-
-.stats {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-align: center;
-}
-.stats p {
-  color: #404060;
+  &.selected {
+    border: 2px black solid;
+  }
 }

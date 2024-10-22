@@ -10,7 +10,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './pokemon-card.component.scss',
 })
 export class PokemonCardComponent {
-  @Input() pokemon!: Pokemon;
+  @Input() pokemon: Pokemon | null = null;
+  
+  @Input() cliquable: boolean = false;
+  @Input() selected: boolean = false;
 
   typeColor: { [key in PokemonType]?: string } = {
     [PokemonType.Bug]: "#26de81",
