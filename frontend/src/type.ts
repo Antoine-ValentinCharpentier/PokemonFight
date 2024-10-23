@@ -71,3 +71,8 @@ export interface Pokemon {
       strong: PokemonMove
   }
 }
+
+export interface TeamId {
+  message: string;
+  team_id: number;
+}

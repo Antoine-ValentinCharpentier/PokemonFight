@@ -19,6 +19,7 @@
     ></app-pokemon-card>
     }
   </div>
+  <button [disabled]="!canSubmitTeam" (click)="submitTeam()">Use this team to fight!</button>
 </div>
 
 <h2>Pokedex</h2>
@@ -40,8 +41,8 @@
     [pokemon]="pokemon"
     (click)="onClickPokemonPokedex(pokemon)"
   ></app-pokemon-card>
-  }
+  } 
   @empty {
-    <p>No Pokémon found.</p>
+  <p>No Pokémon found.</p>
   }
 </div>
