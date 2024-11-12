@@ -1,0 +1,5 @@
+@if(defensivePokemon) {
+    <p>Please spam click on the pokemon card</p>
+    <app-pokemon-card [pokemon]="defensivePokemon" (click)="onAttack()" />
+    {{ currentHealth }} / {{ defensivePokemon.stats.hp }}
+}

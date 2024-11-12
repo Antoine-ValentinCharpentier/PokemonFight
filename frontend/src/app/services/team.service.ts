@@ -10,7 +10,7 @@ export class TeamService {
   constructor(private api: ApiService) {}
 
   team: Pokemon[] = [];
-  teamId: number = -1;
+  teamId: string = "";
 
   getPokedex(): Observable<Pokemon[]> {
     return this.api.get<Pokemon[]>('pokedex', {});

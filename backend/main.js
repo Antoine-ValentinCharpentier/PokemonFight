@@ -1,19 +1,12 @@
-import express from "express";
-import cors from "cors";
+import http from 'http';
+import app from './app.js';
+import { websocketManager } from './websockets/websocketManager.js';
 
-import { teamController } from "./controllers/teamController.js";
-import { pokedexController } from "./controllers/pokedexController.js";
-
-const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
+const server = http.createServer(app);
+websocketManager.setupWebSocketServer(server);
 
-app.get("/pokedex", (req, res) => pokedexController.getPokedex(req, res));
-
-app.post("/team", (req, res) => teamController.postTeam(req, res));
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`);
 });

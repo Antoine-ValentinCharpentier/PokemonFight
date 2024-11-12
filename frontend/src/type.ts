@@ -28,26 +28,26 @@ export interface Options {
 }
 
 export enum PokemonType {
-  Normal = "normal",
-  Fighting = "fighting",
-  Flying = "flying",
-  Poison = "poison",
-  Ground = "ground",
-  Rock = "rock",
-  Bug = "bug",
-  Ghost = "ghost",
-  Steel = "steel",
-  Fire = "fire",
-  Water = "water",
-  Grass = "grass",
-  Electric = "electric",
-  Psychic = "psychic",
-  Ice = "ice",
-  Dragon = "dragon",
-  Dark = "dark",
-  Fairy = "fairy",
-  Unknown = "unknown",
-  Shadow = "shadow",
+  Normal = 'normal',
+  Fighting = 'fighting',
+  Flying = 'flying',
+  Poison = 'poison',
+  Ground = 'ground',
+  Rock = 'rock',
+  Bug = 'bug',
+  Ghost = 'ghost',
+  Steel = 'steel',
+  Fire = 'fire',
+  Water = 'water',
+  Grass = 'grass',
+  Electric = 'electric',
+  Psychic = 'psychic',
+  Ice = 'ice',
+  Dragon = 'dragon',
+  Dark = 'dark',
+  Fairy = 'fairy',
+  Unknown = 'unknown',
+  Shadow = 'shadow',
 }
 
 export interface PokemonMove {
@@ -66,13 +66,18 @@ export interface Pokemon {
     defense: number;
   };
   moves: {
-      weak: PokemonMove,
-      medium: PokemonMove,
-      strong: PokemonMove
-  }
+    weak: PokemonMove;
+    medium: PokemonMove;
+    strong: PokemonMove;
+  };
 }
 
 export interface TeamId {
   message: string;
-  team_id: number;
+  team_id: string;
+}
+
+export interface FightDefensivePokemon {
+  pokemon: Pokemon;
+  health: number;
 }
