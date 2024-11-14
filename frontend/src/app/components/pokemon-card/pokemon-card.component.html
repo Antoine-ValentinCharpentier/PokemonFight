@@ -10,7 +10,7 @@
   }"
 >
   <img [src]="pokemon().image_url" />
-  <h2 class="poke-name">{{ pokemon.name | titlecase }}</h2>
+  <h2 class="poke-name">{{ pokemon().name | titlecase }}</h2>
   <div class="types">
     @for(type of pokemon().types; track type) {
     <span [ngStyle]="{ 'background-color': getTypeColor(type) }">

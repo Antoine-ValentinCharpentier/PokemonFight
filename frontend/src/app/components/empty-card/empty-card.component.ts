@@ -8,6 +8,5 @@ import { Component, input } from '@angular/core';
   styleUrl: './empty-card.component.scss'
 })
 export class EmptyCardComponent {
-  cliquable = input<boolean>(false);
   selected = input<boolean>(false);
 }
