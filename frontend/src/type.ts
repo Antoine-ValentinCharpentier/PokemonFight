@@ -77,7 +77,7 @@ export interface TeamId {
   team_id: string;
 }
 
-export interface FightDefensivePokemon {
-  pokemon: Pokemon;
+export interface MessageHealthUpdate {
+  action: string;
   health: number;
 }

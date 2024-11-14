@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { FightDefensivePokemon } from '../../type';
+import { MessageHealthUpdate, Pokemon } from '../../type';
 import { ApiService } from './api.service';
 import { Observable, of } from 'rxjs';
 import { WebsocketService } from './websocket.service';
@@ -17,14 +17,14 @@ export class FightService {
     this.onHealthChange = this.onHealthChange.bind(this);
   }
 
-  private _health = signal<number>(0);
+  private _pokemon = signal<Pokemon | undefined>(undefined);
 
   initialize(): void {
     this.wsService.connect(this.teamService.teamId, this.onHealthChange);
   }
 
-  getDefensivePokemon(): Observable<FightDefensivePokemon> {
-    return this.api.get<FightDefensivePokemon>('fight/pokemon', {});
+  getDefensivePokemon(): Observable<Pokemon> {
+    return this.api.get<Pokemon>('fight/pokemon', {});
   }
 
   onAttack(): void {
@@ -33,18 +33,25 @@ export class FightService {
     });
   }
 
-  get health(): number {
-    return this._health();
+  get pokemon(): Pokemon | undefined {
+    return this._pokemon();
   }
 
-  set health(hp: number) {
-    this._health.set(hp);
+  set pokemon(pokemon: Pokemon) {
+    this._pokemon.set(pokemon);
   }
 
-  onHealthChange(message: any): void {
+  onHealthChange(message: MessageHealthUpdate): void {
     if (message.action !== 'healthUpdate') {
       return;
     }
-    this._health.set(message.health);
+    this._pokemon.update((pokemon) => {
+      if(!pokemon){
+        return pokemon;
+      }
+      const newPokemon = {...pokemon}
+      newPokemon.stats.hp = message.health;
+      return newPokemon
+    })
   }
 }

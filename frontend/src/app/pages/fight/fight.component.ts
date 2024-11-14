@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { PokemonCardComponent } from '../../components/pokemon-card/pokemon-card.component';
 import { FightService } from '../../services/fight.service';
-import { FightDefensivePokemon, Pokemon } from '../../../type';
+import { Pokemon } from '../../../type';
 import { TeamService } from '../../services/team.service';
 
 @Component({
@@ -14,14 +14,11 @@ import { TeamService } from '../../services/team.service';
 export class FightComponent implements OnInit {
   constructor(public fightService: FightService, public teamService: TeamService) {}
 
-  defensivePokemon = signal<Pokemon | undefined>(undefined);
-
   ngOnInit(): void {
     this.fightService.initialize();
     this.fightService.getDefensivePokemon().subscribe({
-      next: (data: FightDefensivePokemon) => {
-        this.defensivePokemon.set(data.pokemon)
-        this.fightService.health = data.health;
+      next: (pokemon: Pokemon) => {
+        this.fightService.pokemon = pokemon;
       },
       error: (error) => {
         console.log(error);
