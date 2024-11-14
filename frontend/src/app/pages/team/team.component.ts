@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { TeamService } from '../../services/team.service';
 import { Pokemon, TeamId } from '../../../type';
 import { PokemonCardComponent } from '../../components/pokemon-card/pokemon-card.component';
@@ -21,21 +21,21 @@ export class TeamComponent implements OnInit {
     private router: Router
   ) {}
 
-  searchTermPokedex: string = '';
+  searchTermPokedex = signal<string>('');
 
-  pokedex: Pokemon[] = [];
-  filteredPokedex: Pokemon[] = [];
+  pokedex : Pokemon[] = [];
+  filteredPokedex = signal<Pokemon[]>([]);
 
-  team: Pokemon[] = [];
-  selectedIndexPokemonTeam: number = -1;
+  team = signal<Pokemon[]>([]);
+  selectedIndexPokemonTeam = signal<number>(-1);
 
-  canSubmitTeam: boolean = false;
+  canSubmitTeam = signal<boolean>(false)
 
   ngOnInit() {
     this.teamService.getPokedex().subscribe({
       next: (data: Pokemon[]) => {
         this.pokedex = data;
-        this.filteredPokedex = data;
+        this.filteredPokedex.set(data);
       },
       error: (error) => {
         console.log(error);
@@ -45,28 +45,28 @@ export class TeamComponent implements OnInit {
 
   onSearchTermChange() {
     if (this.searchTermPokedex) {
-      this.filteredPokedex = this.pokedex.filter((pokemon) =>
+      this.filteredPokedex.set(this.pokedex.filter((pokemon) =>
         pokemon.name
           .toLowerCase()
-          .includes(this.searchTermPokedex.toLowerCase())
-      );
+          .includes(this.searchTermPokedex().toLowerCase())
+      ));
     } else {
-      this.filteredPokedex = this.pokedex;
+      this.filteredPokedex.set(this.pokedex);
     }
   }
 
   onClickPokemonTeam(indexPokemon: number) {
-    this.selectedIndexPokemonTeam = indexPokemon;
+    this.selectedIndexPokemonTeam.set(indexPokemon);
   }
 
   onClickPokemonPokedex(pokemon: Pokemon) {
-    const index = this.team.indexOf(pokemon);
+    const index = this.team().indexOf(pokemon);
     if (index === -1) {
-      if (this.selectedIndexPokemonTeam === -1) {
-        if (this.team.length < 3) {
-          this.team.push(pokemon);
-          if (this.team.length === 3) {
-            this.canSubmitTeam = true;
+      if (this.selectedIndexPokemonTeam() === -1) {
+        if (this.team().length < 3) {
+          this.team.set([...this.team(), pokemon]);
+          if (this.team().length === 3) {
+            this.canSubmitTeam.set(true);
           }
         } else {
           this.toast.error(
@@ -80,10 +80,13 @@ export class TeamComponent implements OnInit {
           );
         }
       } else {
-        if (this.team.length <= this.selectedIndexPokemonTeam) {
-          this.team.push(pokemon);
+        if (this.team().length <= this.selectedIndexPokemonTeam()) {
+          this.team.set([...this.team(), pokemon]);
         } else {
-          this.team[this.selectedIndexPokemonTeam] = pokemon;
+          const updatedTeam = this.team().map((p, index) =>
+            index === this.selectedIndexPokemonTeam() ? pokemon : p
+          );
+          this.team.set(updatedTeam);
         }
       }
     } else {
@@ -100,8 +103,8 @@ export class TeamComponent implements OnInit {
   }
 
   isTeamValid(): boolean {
-    if (this.team.length === 3) {
-      const names = this.team.map((pokemon) => pokemon?.name);
+    if (this.team().length === 3) {
+      const names = this.team().map((pokemon) => pokemon?.name);
       const uniqueNames = new Set(names);
 
       if (uniqueNames.size === names.length) {
@@ -133,9 +136,9 @@ export class TeamComponent implements OnInit {
 
   submitTeam() {
     if (this.isTeamValid()) {
-      this.teamService.uploadTeam(this.team).subscribe({
+      this.teamService.uploadTeam(this.team()).subscribe({
         next: (data: TeamId) => {
-          this.teamService.setTeam(this.team);
+          this.teamService.setTeam(this.team());
           this.teamService.teamId = data.team_id;
           this.router.navigate(['/fight']);
         },

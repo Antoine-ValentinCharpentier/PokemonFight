@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { FightDefensivePokemon } from '../../type';
 import { ApiService } from './api.service';
 import { Observable, of } from 'rxjs';
@@ -13,9 +13,11 @@ export class FightService {
     private api: ApiService,
     private wsService: WebsocketService,
     private teamService: TeamService
-  ) {}
+  ) {
+    this.onHealthChange = this.onHealthChange.bind(this);
+  }
 
-  health: number = 0;
+  private _health = signal<number>(0);
 
   initialize(): void {
     console.log('Initializing FightService');
@@ -32,14 +34,19 @@ export class FightService {
     });
   }
 
-  setHealth(health: number) {
-    this.health = health;
+  get health(): number {
+    return this._health();
+  }
+
+  set health(hp: number) {
+    console.log('new health', hp)
+    this._health.set(hp);
   }
 
   onHealthChange(message: any): void {
     if (message.action !== 'healthUpdate') {
       return;
     }
-    this.health = message.health;
+    this._health.set(message.health);
   }
 }
