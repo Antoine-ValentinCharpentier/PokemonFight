@@ -1,7 +1,12 @@
-@let pokemon = defensivePokemon();
-
-@if(pokemon) {
-    <p>Please spam click on the pokemon card</p>
-    <app-pokemon-card [pokemon]="pokemon" (click)="onAttack()" />
-    {{ fightService.health }} / {{ pokemon.stats.hp }}
+@let pokemon = defensivePokemon(); @if(pokemon) {
+<p>Please spam click on the pokemon card</p>
+<app-pokemon-card [pokemon]="pokemon" (click)="onAttack()" />
+{{ fightService.health }} / {{ pokemon.stats.hp }}
 }
+
+<h1>Your team</h1>
+<div class="team">
+  @for(pokemon of teamService.team; track pokemon.name) {
+  <app-pokemon-card [pokemon]="pokemon" />
+  }
+</div>

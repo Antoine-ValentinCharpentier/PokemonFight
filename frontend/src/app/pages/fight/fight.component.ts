@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { PokemonCardComponent } from '../../components/pokemon-card/pokemon-card.component';
 import { FightService } from '../../services/fight.service';
 import { FightDefensivePokemon, Pokemon } from '../../../type';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'app-fight',
@@ -11,7 +12,7 @@ import { FightDefensivePokemon, Pokemon } from '../../../type';
   styleUrl: './fight.component.scss',
 })
 export class FightComponent implements OnInit {
-  constructor(public fightService: FightService) {}
+  constructor(public fightService: FightService, public teamService: TeamService) {}
 
   defensivePokemon = signal<Pokemon | undefined>(undefined);
 
