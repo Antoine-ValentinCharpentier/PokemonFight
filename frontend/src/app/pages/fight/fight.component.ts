@@ -29,7 +29,6 @@ export class FightComponent implements OnInit {
   }
 
   onAttack(): void {
-    console.log('ATTACK');
     this.fightService.onAttack();
   }
 }

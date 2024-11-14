@@ -12,7 +12,6 @@ export class WebsocketService {
   constructor() {}
 
   connect(channel: string, callback: (data: any) => void) {
-    console.log('CONNECTED');
     this.messageCallback = callback;
     
     this.socket = io('http://localhost:3000', {

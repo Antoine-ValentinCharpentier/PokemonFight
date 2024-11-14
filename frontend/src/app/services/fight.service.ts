@@ -20,7 +20,6 @@ export class FightService {
   private _health = signal<number>(0);
 
   initialize(): void {
-    console.log('Initializing FightService');
     this.wsService.connect(this.teamService.teamId, this.onHealthChange);
   }
 
@@ -39,7 +38,6 @@ export class FightService {
   }
 
   set health(hp: number) {
-    console.log('new health', hp)
     this._health.set(hp);
   }
 
