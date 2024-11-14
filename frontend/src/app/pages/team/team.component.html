@@ -9,14 +9,14 @@
       [selected]="indexPokemon === selectedIndexPokemonTeam()"
       [pokemon]="pokemon"
       (click)="onClickPokemonTeam(indexPokemon)"
-    ></app-pokemon-card>
+    />
     } 
     @for(fakePokemon of [].constructor(3-team().length); track fakePokemon; let i = $index) {
     <app-pokemon-card
       [pokemon]="null"
       [selected]="i + team().length === selectedIndexPokemonTeam()"
       (click)="onClickPokemonTeam(i + team().length)"
-    ></app-pokemon-card>
+    />
     }
   </div>
   <button [disabled]="!canSubmitTeam()" (click)="submitTeam()">Use this team to fight!</button>
@@ -40,7 +40,7 @@
     [cliquable]="true"
     [pokemon]="pokemon"
     (click)="onClickPokemonPokedex(pokemon)"
-  ></app-pokemon-card>
+  />
   } 
   @empty {
   <p>No Pokémon found.</p>

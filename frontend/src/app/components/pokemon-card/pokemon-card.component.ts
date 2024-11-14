@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { Pokemon, PokemonType } from '../../../type';
 import { CommonModule } from '@angular/common';
 
@@ -12,8 +12,12 @@ import { CommonModule } from '@angular/common';
 export class PokemonCardComponent {
   @Input() pokemon: Pokemon | null = null;
   
-  @Input() cliquable: boolean = false;
-  @Input() selected: boolean = false;
+  cliquable = input<boolean>(false);
+  selected = input<boolean>(false);
+
+  showAttackStat = input<boolean>(true);
+  showDefenseStat = input<boolean>(true);
+  showHealthStat = input<boolean>(true);
 
   typeColor: { [key in PokemonType]?: string } = {
     [PokemonType.Bug]: "#26de81",

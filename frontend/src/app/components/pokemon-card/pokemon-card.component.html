@@ -1,8 +1,8 @@
 @if(pokemon) {
 <div
   class="card"
-  [class.cliquable]="cliquable"
-  [class.selected]="selected"
+  [class.cliquable]="cliquable()"
+  [class.selected]="selected()"
   [ngStyle]="{
     background:
       'radial-gradient(circle at 50% 0%, ' +
@@ -21,25 +21,31 @@
     </span>
   </div>
   <div class="stats">
-    <div>
-      <p>Attack</p>
-      <h3>{{ pokemon.stats.attack }}</h3>
-    </div>
-    <div>
-      <p>Defense</p>
-      <h3>{{ pokemon.stats.defense }}</h3>
-    </div>
-    <div>
-      <p>HP</p>
-      <h3>{{ pokemon.stats.hp }}</h3>
-    </div>
+    @if(showAttackStat()) {
+      <div>
+        <p>Attack</p>
+        <h3>{{ pokemon.stats.attack }}</h3>
+      </div>
+    }
+    @if(showDefenseStat()) {
+      <div>
+        <p>Defense</p>
+        <h3>{{ pokemon.stats.defense }}</h3>
+      </div>
+    }
+    @if(showHealthStat()) {
+      <div>
+        <p>HP</p>
+        <h3>{{ pokemon.stats.hp }}</h3>
+      </div>
+    }
   </div>
 </div>
 } @else {
 <div
   class="card card-empty"
-  [class.cliquable]="cliquable"
-  [class.selected]="selected"
+  [class.cliquable]="cliquable()"
+  [class.selected]="selected()"
 >
   <span>Pokemon not selected</span>
 </div>

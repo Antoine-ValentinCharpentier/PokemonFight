@@ -41,9 +41,13 @@
     align-items: center;
     justify-content: space-between;
     text-align: center;
-    p {
-      color: #404060;
+    div {
+      width: 100%;
+      p {
+        color: #404060;
+      }
     }
+    
   }
 
   // Empty
