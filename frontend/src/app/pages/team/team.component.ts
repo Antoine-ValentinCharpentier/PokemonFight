@@ -11,7 +11,12 @@ import { EmptyCardComponent } from '../../components/empty-card/empty-card.compo
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [PokemonCardComponent, CommonModule, FormsModule, EmptyCardComponent],
+  imports: [
+    PokemonCardComponent,
+    CommonModule,
+    FormsModule,
+    EmptyCardComponent,
+  ],
   templateUrl: './team.component.html',
   styleUrl: './team.component.scss',
 })
@@ -96,6 +101,9 @@ export class TeamComponent implements OnInit {
     } else {
       if (this.team().length <= this.selectedIndexPokemonTeam()) {
         this.team.set([...this.team(), pokemon]);
+        if (this.team().length === 3) {
+          this.canSubmitTeam.set(true);
+        }
       } else {
         const updatedTeam = this.team().map((p, index) =>
           index === this.selectedIndexPokemonTeam() ? pokemon : p
