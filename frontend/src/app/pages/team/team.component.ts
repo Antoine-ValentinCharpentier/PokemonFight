@@ -23,13 +23,13 @@ export class TeamComponent implements OnInit {
 
   searchTermPokedex = signal<string>('');
 
-  pokedex : Pokemon[] = [];
+  pokedex: Pokemon[] = [];
   filteredPokedex = signal<Pokemon[]>([]);
 
   team = signal<Pokemon[]>([]);
   selectedIndexPokemonTeam = signal<number>(-1);
 
-  canSubmitTeam = signal<boolean>(false)
+  canSubmitTeam = signal<boolean>(false);
 
   ngOnInit() {
     this.teamService.getPokedex().subscribe({
@@ -45,11 +45,13 @@ export class TeamComponent implements OnInit {
 
   onSearchTermChange() {
     if (this.searchTermPokedex) {
-      this.filteredPokedex.set(this.pokedex.filter((pokemon) =>
-        pokemon.name
-          .toLowerCase()
-          .includes(this.searchTermPokedex().toLowerCase())
-      ));
+      this.filteredPokedex.set(
+        this.pokedex.filter((pokemon) =>
+          pokemon.name
+            .toLowerCase()
+            .includes(this.searchTermPokedex().toLowerCase())
+        )
+      );
     } else {
       this.filteredPokedex.set(this.pokedex);
     }
@@ -61,35 +63,7 @@ export class TeamComponent implements OnInit {
 
   onClickPokemonPokedex(pokemon: Pokemon) {
     const index = this.team().indexOf(pokemon);
-    if (index === -1) {
-      if (this.selectedIndexPokemonTeam() === -1) {
-        if (this.team().length < 3) {
-          this.team.set([...this.team(), pokemon]);
-          if (this.team().length === 3) {
-            this.canSubmitTeam.set(true);
-          }
-        } else {
-          this.toast.error(
-            'If you want to replace a Pokémon from your team with another Pokémon from the Pokédex, please select a Pokémon of your current team.',
-            'Team Full',
-            {
-              timeOut: 6000,
-              closeButton: true,
-              progressBar: true,
-            }
-          );
-        }
-      } else {
-        if (this.team().length <= this.selectedIndexPokemonTeam()) {
-          this.team.set([...this.team(), pokemon]);
-        } else {
-          const updatedTeam = this.team().map((p, index) =>
-            index === this.selectedIndexPokemonTeam() ? pokemon : p
-          );
-          this.team.set(updatedTeam);
-        }
-      }
-    } else {
+    if (index !== -1) {
       this.toast.error(
         'You cannot have two identical Pokémon in your team. Please select a different Pokémon.',
         'Duplicate Pokémon',
@@ -99,28 +73,39 @@ export class TeamComponent implements OnInit {
           progressBar: true,
         }
       );
+      return;
     }
-  }
-
-  isTeamValid(): boolean {
-    if (this.team().length === 3) {
-      const names = this.team().map((pokemon) => pokemon?.name);
-      const uniqueNames = new Set(names);
-
-      if (uniqueNames.size === names.length) {
-        return true;
-      } else {
+    if (this.selectedIndexPokemonTeam() === -1) {
+      if (this.team().length >= 3) {
         this.toast.error(
-          'Each Pokémon in your team must be unique.',
-          'Duplicate Pokémon Found',
+          'If you want to replace a Pokémon from your team with another Pokémon from the Pokédex, please select a Pokémon of your current team.',
+          'Team Full',
           {
             timeOut: 6000,
             closeButton: true,
             progressBar: true,
           }
         );
+        return;
+      }
+      this.team.set([...this.team(), pokemon]);
+      if (this.team().length === 3) {
+        this.canSubmitTeam.set(true);
       }
     } else {
+      if (this.team().length <= this.selectedIndexPokemonTeam()) {
+        this.team.set([...this.team(), pokemon]);
+      } else {
+        const updatedTeam = this.team().map((p, index) =>
+          index === this.selectedIndexPokemonTeam() ? pokemon : p
+        );
+        this.team.set(updatedTeam);
+      }
+    }
+  }
+
+  isTeamValid(): boolean {
+    if (this.team().length !== 3) {
       this.toast.error(
         'Your team must have exactly 3 Pokémon.',
         'Invalid Team Size',
@@ -130,26 +115,50 @@ export class TeamComponent implements OnInit {
           progressBar: true,
         }
       );
+      return false;
     }
-    return false;
+
+    const names = this.team().map((pokemon) => pokemon?.name);
+    const uniqueNames = new Set(names);
+
+    if (uniqueNames.size !== names.length) {
+      this.toast.error(
+        'Each Pokémon in your team must be unique.',
+        'Duplicate Pokémon Found',
+        {
+          timeOut: 6000,
+          closeButton: true,
+          progressBar: true,
+        }
+      );
+      return false;
+    }
+
+    return true;
   }
 
   submitTeam() {
-    if (this.isTeamValid()) {
-      this.teamService.uploadTeam(this.team()).subscribe({
-        next: (data: TeamId) => {
-          this.teamService.setTeam(this.team());
-          this.teamService.teamId = data.team_id;
-          this.router.navigate(['/fight']);
-        },
-        error: (error) => {
-          this.toast.error('Failed upload Team', '', {
-            timeOut: 6000,
-            closeButton: true,
-            progressBar: true,
-          });
-        },
+    if (!this.isTeamValid()) {
+      this.toast.error('Your team is invalid', '', {
+        timeOut: 6000,
+        closeButton: true,
+        progressBar: true,
       });
+      return;
     }
+    this.teamService.uploadTeam(this.team()).subscribe({
+      next: (data: TeamId) => {
+        this.teamService.setTeam(this.team());
+        this.teamService.teamId = data.team_id;
+        this.router.navigate(['/fight']);
+      },
+      error: (error) => {
+        this.toast.error('Failed upload Team', '', {
+          timeOut: 6000,
+          closeButton: true,
+          progressBar: true,
+        });
+      },
+    });
   }
 }
