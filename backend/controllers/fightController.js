@@ -4,7 +4,7 @@ import { teamService } from "../services/teamService.js";
 export class FightController {
   getDefensivePokemon(req, res) {
     const defensivePokemon = fightService.getDefensivePokemon();
-    if (defensivePokemon.pokemon) {
+    if (defensivePokemon) {
       return res.status(200).json(defensivePokemon);
     } else {
       return res.status(500).json({ message: "Defensive pokemon not defined" });
@@ -13,10 +13,9 @@ export class FightController {
 
   handleOnAttack(teamId) {
     const team = teamService.getTeamById(teamId);
-    let newHealth = fightService.getDefensivePokemon().health;
+    let newHealth = fightService.getDefensivePokemon().stats.hp;
     team.forEach((pokemon) => {
-      const result = fightService.handleReceiveDamage(pokemon, "weak");
-      newHealth = result.health;
+      newHealth = fightService.handleReceiveDamage(pokemon, "weak");
     });
     return newHealth;
   }

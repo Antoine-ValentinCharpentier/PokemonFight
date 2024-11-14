@@ -22,18 +22,14 @@ const typeEffectiveness = {
 };
 
 export class FightService {
-    constructor() {
+    constructor(niveau = 100) {
         this.pokemon = pokedexService.getRandomPokemon();
         this.pokemon.stats.hp = this.pokemon.stats.hp * 10_000;
-        this.currentHealth = this.pokemon.stats.hp;
-        this.niveau = 100
+        this.niveau = niveau;
     }
 
     getDefensivePokemon() {
-        return {
-            pokemon: this.pokemon,
-            health: this.currentHealth
-        }
+        return this.pokemon;
     }
 
     calculateTypeEffectiveness(attackType, defenderTypes) {
@@ -63,14 +59,10 @@ export class FightService {
         const baseDamage = (((2 * this.niveau / 5 + 2) * attackPower * movePower) / (defensePower * 50) + 2);
         const damage = Math.floor(baseDamage * stab * typeEffectivenessMultiplier * randomFactor);
 
-        this.currentHealth = Math.max(0, this.currentHealth - damage);
+        const currentHealth = this.pokemon.stats.hp;
+        this.pokemon.stats.hp = Math.max(0, currentHealth - damage);
 
-        // console.log(`${attacker.name} utilise ${move.name}!`);
-        // console.log(`STAB: ${stab}, Efficacité de type: ${typeEffectivenessMultiplier}`);
-        // console.log(`Dégâts infligés: ${damage}`);
-        // console.log(`PV restants: ${this.health}`);
-
-        return { health: this.currentHealth }
+        return this.pokemon.stats.hp
     }
 }
 
