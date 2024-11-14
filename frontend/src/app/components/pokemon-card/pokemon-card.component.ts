@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './pokemon-card.component.scss',
 })
 export class PokemonCardComponent {
-  @Input() pokemon: Pokemon | null = null;
+  pokemon = input.required<Pokemon>();
   
   cliquable = input<boolean>(false);
   selected = input<boolean>(false);

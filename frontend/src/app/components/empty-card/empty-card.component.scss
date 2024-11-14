@@ -1,0 +1,30 @@
+.card {
+  position: relative;
+  width: 200px;
+  padding: 30px 20px;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  border: 2px white solid;
+  &.card-empty {
+    border: 1px solid black;
+    border-style: dashed;
+    box-shadow: none;
+    height: 324px;
+    padding: 0 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.cliquable {
+    cursor: pointer;
+    &:hover {
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  &.selected {
+    border: 2px black solid;
+  }
+}

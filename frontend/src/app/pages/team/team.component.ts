@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { EmptyCardComponent } from '../../components/empty-card/empty-card.component';
 
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [PokemonCardComponent, CommonModule, FormsModule],
+  imports: [PokemonCardComponent, CommonModule, FormsModule, EmptyCardComponent],
   templateUrl: './team.component.html',
   styleUrl: './team.component.scss',
 })
