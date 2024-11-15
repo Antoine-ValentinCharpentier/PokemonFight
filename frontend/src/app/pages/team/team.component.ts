@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { TeamService } from '../../services/team.service';
 import { Pokemon, TeamId } from '../../../type';
 import { PokemonCardComponent } from '../../components/pokemon-card/pokemon-card.component';
@@ -22,7 +22,7 @@ import { EmptyCardComponent } from '../../components/empty-card/empty-card.compo
 })
 export class TeamComponent implements OnInit {
   constructor(
-    private teamService: TeamService,
+    public teamService: TeamService,
     private toast: ToastrService,
     private router: Router
   ) {}
@@ -32,7 +32,6 @@ export class TeamComponent implements OnInit {
   pokedex: Pokemon[] = [];
   filteredPokedex = signal<Pokemon[]>([]);
 
-  team = signal<Pokemon[]>([]);
   selectedIndexPokemonTeam = signal<number>(-1);
 
   canSubmitTeam = signal<boolean>(false);
@@ -68,7 +67,7 @@ export class TeamComponent implements OnInit {
   }
 
   onClickPokemonPokedex(pokemon: Pokemon) {
-    const index = this.team().indexOf(pokemon);
+    const index = this.teamService.team().indexOf(pokemon);
     if (index !== -1) {
       this.toast.error(
         'You cannot have two identical Pokémon in your team. Please select a different Pokémon.',
@@ -82,7 +81,7 @@ export class TeamComponent implements OnInit {
       return;
     }
     if (this.selectedIndexPokemonTeam() === -1) {
-      if (this.team().length >= 3) {
+      if ( this.teamService.team().length >= 3) {
         this.toast.error(
           'If you want to replace a Pokémon from your team with another Pokémon from the Pokédex, please select a Pokémon of your current team.',
           'Team Full',
@@ -94,70 +93,38 @@ export class TeamComponent implements OnInit {
         );
         return;
       }
-      this.team.set([...this.team(), pokemon]);
-      if (this.team().length === 3) {
+      this.teamService.team.set([... this.teamService.team(), pokemon]);
+      if ( this.teamService.team().length === 3) {
         this.canSubmitTeam.set(true);
       }
     } else {
-      if (this.team().length <= this.selectedIndexPokemonTeam()) {
-        this.team.set([...this.team(), pokemon]);
-        if (this.team().length === 3) {
+      if ( this.teamService.team().length <= this.selectedIndexPokemonTeam()) {
+        this.teamService.team.set([... this.teamService.team(), pokemon]);
+        if ( this.teamService.team().length === 3) {
           this.canSubmitTeam.set(true);
         }
       } else {
-        const updatedTeam = this.team().map((p, index) =>
+        const updatedTeam =  this.teamService.team().map((p, index) =>
           index === this.selectedIndexPokemonTeam() ? pokemon : p
         );
-        this.team.set(updatedTeam);
+        this.teamService.team.set(updatedTeam);
       }
     }
   }
 
-  isTeamValid(): boolean {
-    if (this.team().length !== 3) {
-      this.toast.error(
-        'Your team must have exactly 3 Pokémon.',
-        'Invalid Team Size',
-        {
-          timeOut: 6000,
-          closeButton: true,
-          progressBar: true,
-        }
-      );
-      return false;
-    }
-
-    const names = this.team().map((pokemon) => pokemon?.name);
-    const uniqueNames = new Set(names);
-
-    if (uniqueNames.size !== names.length) {
-      this.toast.error(
-        'Each Pokémon in your team must be unique.',
-        'Duplicate Pokémon Found',
-        {
-          timeOut: 6000,
-          closeButton: true,
-          progressBar: true,
-        }
-      );
-      return false;
-    }
-
-    return true;
-  }
-
   submitTeam() {
-    if (!this.isTeamValid()) {
-      this.toast.error('Your team is invalid', '', {
+    const validateTeam = this.teamService.validateTeam();
+    if (!validateTeam.isValid) {
+      this.toast.error(validateTeam.errorMessage, validateTeam.errorTitle, {
         timeOut: 6000,
         closeButton: true,
         progressBar: true,
       });
       return;
     }
-    this.teamService.uploadTeam(this.team()).subscribe({
+
+    this.teamService.uploadTeam().subscribe({
       next: (data: TeamId) => {
-        this.teamService.setTeam(this.team());
         this.teamService.teamId = data.team_id;
         this.router.navigate(['/fight']);
       },

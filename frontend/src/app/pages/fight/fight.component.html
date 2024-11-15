@@ -12,7 +12,7 @@
 
 <h1>Your team</h1>
 <div class="team">
-  @for(pokemon of teamService.team; track pokemon.name) {
+  @for(pokemon of teamService.team(); track pokemon.name) {
     <app-pokemon-card [pokemon]="pokemon" />
   }
 </div>

@@ -1,20 +1,22 @@
+@let team = teamService.team();
+
 <h2>Team</h2>
 
 <div class="team">
   <p>Please compose your team of 3 Pokémon</p>
   <div>
-    @for(pokemon of team(); track pokemon.name; let indexPokemon = $index) {
+    @for(pokemon of team; track pokemon.name; let indexPokemon = $index) {
     <app-pokemon-card
       [cliquable]="true"
       [selected]="indexPokemon === selectedIndexPokemonTeam()"
       [pokemon]="pokemon"
       (click)="onClickPokemonTeam(indexPokemon)"
     />
-    } @for(fakePokemon of [].constructor(3-team().length); track fakePokemon;
-    let i = $index) {
+    } @for(fakePokemon of [].constructor(3-team.length); track fakePokemon; let
+    i = $index) {
     <app-empty-card
-      [selected]="i + team().length === selectedIndexPokemonTeam()"
-      (click)="onClickPokemonTeam(i + team().length)"
+      [selected]="i + team.length === selectedIndexPokemonTeam()"
+      (click)="onClickPokemonTeam(i + team.length)"
     />
     }
   </div>
