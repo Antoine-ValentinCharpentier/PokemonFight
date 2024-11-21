@@ -1,18 +1,21 @@
 @let pokemon = fightService.pokemon; 
 
 @if(pokemon) {
-  <p>Please spam click on the pokemon card</p>
-  <app-pokemon-card
-    [pokemon]="pokemon"
-    (click)="onAttack()"
-    [showAttackStat]="false"
-    [showDefenseStat]="false"
-  />
+  <div class="boss">
+    <h1>The boss</h1>
+    <p>Please spam click on the boss</p>
+    <app-pokemon-card
+      [pokemon]="pokemon"
+      (click)="onAttack()"
+      [showAttackStat]="false"
+      [showDefenseStat]="false"
+    />
+  </div>
 }
 
 <h1>Your team</h1>
 <div class="team">
   @for(pokemon of teamService.team(); track pokemon.name) {
-    <app-pokemon-card [pokemon]="pokemon" />
+  <app-pokemon-card [pokemon]="pokemon" />
   }
 </div>
