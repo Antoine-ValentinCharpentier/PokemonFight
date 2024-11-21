@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client'; 
+import { environment } from '../../environments/environment';
+
+const SOCKET_URL = environment.api.baseUrl.websocket 
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +12,10 @@ export class WebsocketService {
   socket: Socket | undefined;
   messageCallback: ((data: any) => void) | undefined;
 
-  constructor() {}
-
   connect(channel: string, callback: (data: any) => void) {
     this.messageCallback = callback;
     
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(SOCKET_URL, {
       query: { channel: channel } 
     });
 

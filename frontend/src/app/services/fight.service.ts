@@ -4,6 +4,7 @@ import { ApiService } from './api.service';
 import { Observable, of } from 'rxjs';
 import { WebsocketService } from './websocket.service';
 import { TeamService } from './team.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class FightService {
   }
 
   getDefensivePokemon(): Observable<Pokemon> {
-    return this.api.get<Pokemon>('fight/pokemon', {});
+    return this.api.get<Pokemon>(environment.api.endpoint.boss, {});
   }
 
   onAttack(): void {

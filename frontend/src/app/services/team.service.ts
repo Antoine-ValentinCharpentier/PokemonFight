@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { ApiService } from './api.service';
 import { Observable } from 'rxjs';
 import { Pokemon, TeamId } from '../../type';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +14,11 @@ export class TeamService {
   teamId: string = "";
 
   getPokedex(): Observable<Pokemon[]> {
-    return this.api.get<Pokemon[]>('pokedex', {});
+    return this.api.get<Pokemon[]>(environment.api.endpoint.pokedex, {});
   }
 
   uploadTeam(): Observable<TeamId> {
-    return this.api.post<TeamId>('team', { team: this.team() }, {});
+    return this.api.post<TeamId>(environment.api.endpoint.uploadTeam, { team: this.team() }, {});
   }
 
   validateTeam() {
